@@ -1,0 +1,153 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+}
+
+.container {
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  margin: auto;
+  border-radius: 50%;
+  background: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header h1 {
+  margin: 12px 0 5px;
+  font-size: 30px;
+}
+
+.header p {
+  margin: 0;
+  color: #94a3b8;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 18px;
+  padding: 22px;
+  margin: 15px 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.balance-card {
+  text-align: center;
+}
+
+.label {
+  color: #94a3b8;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+#balance {
+  font-size: 44px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.rate {
+  color: #64748b;
+  margin: 0;
+}
+
+.mining-card {
+  text-align: center;
+}
+
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+#dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #64748b;
+}
+
+.timer {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 25px 0;
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  background: #2563eb;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.stop {
+  background: #dc2626;
+}
+
+.stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+}
+
+.stat span {
+  display: block;
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.stat strong {
+  font-size: 17px;
+}
+
+.info h3 {
+  margin-top: 0;
+}
+
+.info p {
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.footer {
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+  padding: 10px;
+}
