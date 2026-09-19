@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LBC — Lover Boy Token Mining</title>
+<style>
+body{margin:0;background:#080808;color:#fff;font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:18px}.card{background:#151515;border:1px solid #292929;border-radius:18px;padding:20px;margin:14px 0}.logo{margin:auto;width:85px;height:85px;border:2px solid #d9ad4d;border-radius:50%;display:grid;place-items:center;color:#e2b956;font-size:27px;font-weight:900}.gold{color:#e2b956}.muted{color:#aaa;font-size:13px}.balance{text-align:center;color:#e2b956;font-size:38px;font-weight:800;margin:18px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#0d0d0d;border-radius:12px;padding:14px;text-align:center}.stat b{display:block;font-size:20px;margin-top:6px}button,input{width:100%;box-sizing:border-box;padding:14px;border-radius:11px;font-size:15px}button{border:0;background:#d9ad4d;color:#111;font-weight:800;cursor:pointer}button.stop{background:#333;color:#fff}input{background:#0d0d0d;color:#fff;border:1px solid #333;margin:7px 0 12px}a{color:#e2b956}.notice{border-left:3px solid #d9ad4d;color:#bbb;font-size:13px}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style><style>
+.chrome-note{position:fixed;left:10px;right:10px;bottom:10px;background:#151515;border:1px solid #d9ad4d;border-radius:12px;padding:10px;text-align:center;color:#ddd;font-size:12px;z-index:9999}
+.chrome-note b{color:#e2b956}
+</style></head><body><div class="wrap">
+<div class="card"><div class="logo">LBC</div><h1 class="gold" style="text-align:center">Lover Boy Token</h1><p class="muted" style="text-align:center">Mining-style Rewards Dashboard • Demo</p></div>
+<div class="card"><div class="balance"><span id="bal">0.000000</span> LBC</div><div class="grid">
+<div class="stat">Mining Rate<b>0.010</b><small>LBC/min</small></div><div class="stat">Time<b id="time">00:00:00</b></div><div class="stat">Status<b id="status">Stopped</b></div></div><br><button id="btn" onclick="startMining()">▶ Start Mining</button></div>
+
+<div class="card"><h2>👥 Referral</h2><input id="ref" readonly value="https://example.com/?ref=LBC12345"><button onclick="copyRef()">Copy Referral Link</button><p id="copy" class="muted"></p></div>
+<div class="card"><h2>🔗 LBC Contract</h2><p class="muted">TON Jetton address:</p><p style="word-break:break-all">EQBa9abWZ9mOBcoeLCJ8tuUbHClagsiqz92uMyaXsErhzr9A</p><a href="https://t.me/blum/app?startapp=memepadjetton_LBC_FMRER-ref_y3yrAYiRt6" target="_blank">Open LBC on Blum →</a></div>
+
+</div>
+<script>
+let on=false,bal=0,sec=0,t;
+const MAX_SECONDS=24*60*60;
+function draw(){
+ document.getElementById('bal').textContent=bal.toFixed(6);
+ let h=String(Math.floor(sec/3600)).padStart(2,'0'),
+     m=String(Math.floor(sec%3600/60)).padStart(2,'0'),
+     s=String(sec%60).padStart(2,'0');
+ document.getElementById('time').textContent=h+':'+m+':'+s;
+ document.getElementById('status').textContent=on?'Mining':'Stopped';
+}
+function startMining(){
+ if(on) return;
+ on=true;
+ const b=document.getElementById('btn');
+ b.disabled=true;
+ b.textContent='⛏ Mining for 24 Hours';
+ b.style.opacity='0.65';
+ t=setInterval(()=>{
+   sec++;
+   bal+=0.01/60;
+   if(sec>=MAX_SECONDS){
+     sec=MAX_SECONDS;
+     bal+=0;
+     clearInterval(t);
+     on=false;
+     b.textContent='✓ 24 Hours Completed';
+     b.disabled=true;
+     b.style.opacity='0.65';
+   }
+   draw();
+ },1000);
+ draw();
+}
+draw();
+</script><div class="chrome-note">🌐 <b>LBC Lover Boy Token</b> — Chrome میں براہِ راست کھولنے کے لیے تیار</div></body></html>
