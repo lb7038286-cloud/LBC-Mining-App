@@ -1,5 +1,10 @@
 const tg = window.Telegram?.WebApp;
 
+
+// ==============================
+// TELEGRAM
+// ==============================
+
 if (tg) {
   tg.ready();
   tg.expand();
@@ -7,83 +12,23 @@ if (tg) {
 
 
 // ==============================
-// TELEGRAM USER
+// USER
 // ==============================
 
-const telegramUser = tg?.initDataUnsafe?.user;
+const telegramUser =
+  tg?.initDataUnsafe?.user;
+
 
 if (telegramUser) {
 
-  document.getElementById("welcome").textContent =
-    "Welcome, " + (telegramUser.first_name || "Miner");
+  const welcome =
+    document.getElementById("welcome");
 
-}
+  if (welcome) {
 
-
-// ==============================
-// USER ID
-// ==============================
-
-const userId = telegramUser?.id || "guest";
-
-
-// ==============================
-// REFERRAL SYSTEM
-// ==============================
-
-const referralCode = "LBC" + userId;
-
-const referralLink =
-  "https://t.me/LBCMiningBot?startapp=ref_" + userId;
-
-
-// Show referral code
-document.getElementById("refCode").textContent =
-  referralCode;
-
-
-// Show referral link
-document.getElementById("refLink").textContent =
-  referralLink;
-
-
-// ==============================
-// REFERRAL COUNT
-// ==============================
-
-let referralCount = Number(
-  localStorage.getItem("lbc_referrals") || 0
-);
-
-document.getElementById("referrals").textContent =
-  referralCount;
-
-
-// ==============================
-// CHECK INCOMING REFERRAL
-// ==============================
-
-const startParam =
-  tg?.initDataUnsafe?.start_param || "";
-
-
-// If someone opened the app
-// using another user's referral link
-if (
-  startParam.startsWith("ref_") &&
-  startParam !== localStorage.getItem("used_referral")
-) {
-
-  const referredBy =
-    startParam.replace("ref_", "");
-
-  // Don't count yourself
-  if (referredBy !== String(userId)) {
-
-    localStorage.setItem(
-      "used_referral",
-      startParam
-    );
+    welcome.textContent =
+      "Welcome, " +
+      (telegramUser.first_name || "Miner");
 
   }
 
@@ -91,33 +36,26 @@ if (
 
 
 // ==============================
-// COPY REFERRAL LINK
+// REFERRAL PAGE BUTTON
 // ==============================
 
-document
-  .getElementById("copyRefBtn")
-  .addEventListener("click", async function () {
+const referralBtn =
+  document.getElementById("referralBtn");
 
-    try {
 
-      await navigator.clipboard.writeText(referralLink);
+if (referralBtn) {
 
-      this.textContent = "✅ LINK COPIED!";
+  referralBtn.addEventListener(
+    "click",
+    function () {
 
-      setTimeout(() => {
-
-        this.textContent =
-          "📋 COPY REFERRAL LINK";
-
-      }, 2000);
-
-    } catch (error) {
-
-      alert("Please copy the referral link manually.");
+      window.location.href =
+        "referrals.html";
 
     }
+  );
 
-  });
+}
 
 
 // ==============================
@@ -126,6 +64,13 @@ document
 
 let balance = Number(
   localStorage.getItem("lbc_balance") || 0
+);
+
+
+let sessionReward = Number(
+  localStorage.getItem(
+    "lbc_session_reward"
+  ) || 0
 );
 
 
@@ -146,101 +91,17 @@ const MAX_MINING_TIME =
 // MINING DATA
 // ==============================
 
-let miningStart =
-  Number(localStorage.getItem("lbc_mining_start") || 0);
+let miningStart = Number(
+  localStorage.getItem(
+    "lbc_mining_start"
+  ) || 0
+);
 
 let running = false;
 
 let seconds = 0;
 
-let sessionReward = Number(
-  localStorage.getItem("lbc_session_reward") || 0
-);
-
 let miningInterval = null;
-
-
-// ==============================
-// CHECK MINING STATUS
-// ==============================
-
-function checkMiningStatus() {
-
-  if (!miningStart) {
-
-    running = false;
-
-    seconds = 0;
-
-    return;
-
-  }
-
-  const now = Date.now();
-
-  const elapsed =
-    now - miningStart;
-
-
-  // 24 hours completed
-  if (elapsed >= MAX_MINING_TIME) {
-
-    const finalSeconds =
-      Math.floor(MAX_MINING_TIME / 1000);
-
-    const alreadyCounted =
-      Number(
-        localStorage.getItem("lbc_counted_seconds") || 0
-      );
-
-    const remainingSeconds =
-      finalSeconds - alreadyCounted;
-
-    if (remainingSeconds > 0) {
-
-      const reward =
-        remainingSeconds * rewardPerSecond;
-
-      balance += reward;
-
-      sessionReward += reward;
-
-    }
-
-    localStorage.setItem(
-      "lbc_balance",
-      balance.toFixed(8)
-    );
-
-    localStorage.setItem(
-      "lbc_session_reward",
-      sessionReward.toFixed(8)
-    );
-
-    localStorage.removeItem(
-      "lbc_mining_start"
-    );
-
-    localStorage.removeItem(
-      "lbc_counted_seconds"
-    );
-
-    running = false;
-
-    seconds = finalSeconds;
-
-    return;
-
-  }
-
-
-  // Mining still active
-  running = true;
-
-  seconds =
-    Math.floor(elapsed / 1000);
-
-}
 
 
 // ==============================
@@ -249,70 +110,127 @@ function checkMiningStatus() {
 
 function updateScreen() {
 
-  document.getElementById("balance").textContent =
-    balance.toFixed(4);
+  const balanceElement =
+    document.getElementById("balance");
 
+  const sessionElement =
+    document.getElementById("session");
 
-  document.getElementById("session").textContent =
-    sessionReward.toFixed(4) + " LBC";
+  const timerElement =
+    document.getElementById("timer");
 
-
-  const hours = String(
-    Math.floor(seconds / 3600)
-  ).padStart(2, "0");
-
-
-  const minutes = String(
-    Math.floor((seconds % 3600) / 60)
-  ).padStart(2, "0");
-
-
-  const secs = String(
-    seconds % 60
-  ).padStart(2, "0");
-
-
-  document.getElementById("timer").textContent =
-    hours + ":" + minutes + ":" + secs;
-
-
-  const status =
+  const statusElement =
     document.getElementById("status");
 
-  const dot =
+  const dotElement =
     document.getElementById("dot");
 
-  const button =
+  const buttonElement =
     document.getElementById("mineBtn");
+
+
+  if (balanceElement) {
+
+    balanceElement.textContent =
+      balance.toFixed(4);
+
+  }
+
+
+  if (sessionElement) {
+
+    sessionElement.textContent =
+      sessionReward.toFixed(4) +
+      " LBC";
+
+  }
+
+
+  const hours =
+    String(
+      Math.floor(seconds / 3600)
+    ).padStart(2, "0");
+
+
+  const minutes =
+    String(
+      Math.floor(
+        (seconds % 3600) / 60
+      )
+    ).padStart(2, "0");
+
+
+  const secs =
+    String(
+      seconds % 60
+    ).padStart(2, "0");
+
+
+  if (timerElement) {
+
+    timerElement.textContent =
+      hours + ":" +
+      minutes + ":" +
+      secs;
+
+  }
 
 
   if (running) {
 
-    status.textContent =
-      "Mining Active";
+    if (statusElement) {
 
-    dot.style.background =
-      "#22c55e";
+      statusElement.textContent =
+        "Mining Active";
 
-    button.textContent =
-      "MINING ACTIVE";
+    }
 
-    button.disabled =
-      true;
+
+    if (dotElement) {
+
+      dotElement.style.background =
+        "#22c55e";
+
+    }
+
+
+    if (buttonElement) {
+
+      buttonElement.textContent =
+        "MINING ACTIVE";
+
+      buttonElement.disabled =
+        true;
+
+    }
 
   } else {
 
-    status.textContent =
-      "Mining Completed";
+    if (statusElement) {
 
-    dot.style.background =
-      "#64748b";
+      statusElement.textContent =
+        "Ready to Mine";
 
-    button.textContent =
-      "START MINING";
+    }
 
-    button.disabled =
-      false;
+
+    if (dotElement) {
+
+      dotElement.style.background =
+        "#64748b";
+
+    }
+
+
+    if (buttonElement) {
+
+      buttonElement.textContent =
+        "START MINING";
+
+      buttonElement.disabled =
+        false;
+
+    }
 
   }
 
@@ -320,134 +238,232 @@ function updateScreen() {
 
 
 // ==============================
-// START MINING
+// START MINING BUTTON
 // ==============================
 
-document
-  .getElementById("mineBtn")
-  .addEventListener("click", function () {
+const mineButton =
+  document.getElementById("mineBtn");
 
-    if (running) {
-      return;
+
+if (mineButton) {
+
+  mineButton.addEventListener(
+    "click",
+    function () {
+
+      if (running) {
+        return;
+      }
+
+
+      // New mining session
+
+      miningStart =
+        Date.now();
+
+      seconds = 0;
+
+      sessionReward = 0;
+
+      running = true;
+
+
+      localStorage.setItem(
+        "lbc_mining_start",
+        String(miningStart)
+      );
+
+
+      localStorage.setItem(
+        "lbc_session_reward",
+        "0"
+      );
+
+
+      localStorage.setItem(
+        "lbc_last_reward",
+        "0"
+      );
+
+
+      updateScreen();
+
+      startMining();
+
     }
+  );
 
-
-    // Start new 24-hour session
-    miningStart = Date.now();
-
-    seconds = 0;
-
-    sessionReward = 0;
-
-
-    localStorage.setItem(
-      "lbc_mining_start",
-      miningStart
-    );
-
-    localStorage.setItem(
-      "lbc_counted_seconds",
-      "0"
-    );
-
-    localStorage.setItem(
-      "lbc_session_reward",
-      "0"
-    );
-
-
-    running = true;
-
-
-    updateScreen();
-
-
-    startMiningTimer();
-
-  });
+}
 
 
 // ==============================
-// MINING TIMER
+// MINING LOOP
 // ==============================
 
-function startMiningTimer() {
+function startMining() {
 
   if (miningInterval) {
 
-    clearInterval(miningInterval);
+    clearInterval(
+      miningInterval
+    );
 
   }
 
 
   miningInterval =
-    setInterval(function () {
+    setInterval(
+      function () {
 
-      if (!miningStart) {
+        if (!miningStart) {
 
-        clearInterval(miningInterval);
+          clearInterval(
+            miningInterval
+          );
 
-        return;
+          return;
 
-      }
-
-
-      const elapsed =
-        Date.now() - miningStart;
-
-
-      // 24 hours finished
-      if (elapsed >= MAX_MINING_TIME) {
-
-        checkMiningStatus();
-
-        clearInterval(miningInterval);
-
-        updateScreen();
-
-        return;
-
-      }
+        }
 
 
-      seconds =
-        Math.floor(elapsed / 1000);
+        const elapsed =
+          Date.now() -
+          miningStart;
 
 
-      const countedSeconds =
-        Number(
-          localStorage.getItem(
-            "lbc_counted_seconds"
-          ) || 0
-        );
+        // ======================
+        // 24 HOURS COMPLETE
+        // ======================
+
+        if (
+          elapsed >=
+          MAX_MINING_TIME
+        ) {
+
+          seconds =
+            24 * 60 * 60;
+
+          const finalReward =
+            24 * 60 *
+            rewardPerMinute;
 
 
-      const currentSeconds =
-        Math.min(
-          seconds,
-          Math.floor(MAX_MINING_TIME / 1000)
-        );
+          const lastReward =
+            Number(
+              localStorage.getItem(
+                "lbc_last_reward"
+              ) || 0
+            );
 
 
-      const newSeconds =
-        currentSeconds - countedSeconds;
+          const difference =
+            finalReward -
+            lastReward;
 
 
-      if (newSeconds > 0) {
+          if (difference > 0) {
 
-        const reward =
-          newSeconds * rewardPerSecond;
+            balance +=
+              difference;
 
-
-        balance += reward;
-
-        sessionReward += reward;
+          }
 
 
-        localStorage.setItem(
-          "lbc_balance",
-          balance.toFixed(8)
-        );
+          sessionReward =
+            finalReward;
+
+
+          localStorage.setItem(
+            "lbc_balance",
+            balance.toFixed(8)
+          );
+
+
+          localStorage.setItem(
+            "lbc_session_reward",
+            sessionReward.toFixed(8)
+          );
+
+
+          localStorage.setItem(
+            "lbc_last_reward",
+            finalReward.toFixed(8)
+          );
+
+
+          localStorage.removeItem(
+            "lbc_mining_start"
+          );
+
+
+          running = false;
+
+
+          clearInterval(
+            miningInterval
+          );
+
+
+          miningInterval = null;
+
+
+          updateScreen();
+
+          return;
+
+        }
+
+
+        // ======================
+        // ACTIVE MINING
+        // ======================
+
+        seconds =
+          Math.floor(
+            elapsed / 1000
+          );
+
+
+        const currentReward =
+          seconds *
+          rewardPerSecond;
+
+
+        const lastReward =
+          Number(
+            localStorage.getItem(
+              "lbc_last_reward"
+            ) || 0
+          );
+
+
+        const difference =
+          currentReward -
+          lastReward;
+
+
+        if (difference > 0) {
+
+          balance +=
+            difference;
+
+
+          localStorage.setItem(
+            "lbc_balance",
+            balance.toFixed(8)
+          );
+
+
+          localStorage.setItem(
+            "lbc_last_reward",
+            currentReward.toFixed(8)
+          );
+
+        }
+
+
+        sessionReward =
+          currentReward;
 
 
         localStorage.setItem(
@@ -456,33 +472,80 @@ function startMiningTimer() {
         );
 
 
-        localStorage.setItem(
-          "lbc_counted_seconds",
-          currentSeconds
-        );
+        updateScreen();
 
-      }
-
-
-      updateScreen();
-
-    }, 1000);
+      },
+      1000
+    );
 
 }
 
 
 // ==============================
-// INITIAL LOAD
+// RESTORE MINING
 // ==============================
 
-checkMiningStatus();
+function restoreMining() {
 
-updateScreen();
+  if (!miningStart) {
+
+    running = false;
+
+    seconds = 0;
+
+    updateScreen();
+
+    return;
+
+  }
 
 
-// Continue mining after reopening app
-if (running) {
+  const elapsed =
+    Date.now() -
+    miningStart;
 
-  startMiningTimer();
+
+  // 24 hours already completed
+
+  if (
+    elapsed >=
+    MAX_MINING_TIME
+  ) {
+
+    running = false;
+
+    seconds =
+      24 * 60 * 60;
+
+    localStorage.removeItem(
+      "lbc_mining_start"
+    );
+
+    updateScreen();
+
+    return;
+
+  }
+
+
+  running = true;
+
+
+  seconds =
+    Math.floor(
+      elapsed / 1000
+    );
+
+
+  updateScreen();
+
+  startMining();
 
 }
+
+
+// ==============================
+// START APP
+// ==============================
+
+restoreMining();
