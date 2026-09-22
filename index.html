@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>LBC Mining App</title>
 
   <link rel="stylesheet" href="style.css">
@@ -15,79 +16,125 @@
   <div class="container">
 
     <div class="header">
+
       <div class="logo">LB</div>
+
       <h1>LBC Mining</h1>
+
       <p id="welcome">Welcome, Miner</p>
+
     </div>
 
+
+    <!-- BALANCE -->
+
     <div class="card balance-card">
+
       <p class="label">LBC BALANCE</p>
-      <div id="balance">0.00</div>
-      <p class="rate">Mining Rate: 0.10 LBC / Minute</p>
+
+      <div id="balance">0.0000</div>
+
+      <p class="rate">
+        Mining Rate: 0.10 LBC / Minute
+      </p>
+
     </div>
+
+
+    <!-- MINING -->
 
     <div class="card mining-card">
 
       <div class="status">
+
         <span id="dot"></span>
-        <span id="status">Ready to Mine</span>
+
+        <span id="status">
+          Ready to Mine
+        </span>
+
       </div>
 
-      <div class="timer" id="timer">00:00:00</div>
 
-      <button id="mineBtn">START MINING</button>
-
-    </div>
-
-    <div class="card stats">
-
-      <div class="stat">
-        <span>Session Reward</span>
-        <strong id="session">0.00 LBC</strong>
+      <div class="timer" id="timer">
+        00:00:00
       </div>
 
-      <div class="stat">
-        <span>Referrals</span>
-        <strong id="referrals">0</strong>
-      </div>
 
-    </div>
-
-    <div class="card referral-card">
-
-      <h3>👥 Refer & Earn</h3>
-
-      <p>Your Referral Code</p>
-
-      <div id="refCode" class="ref-code">
-        Loading...
-      </div>
-
-      <p>Your Referral Link</p>
-
-      <div id="refLink" class="ref-link">
-        Loading...
-      </div>
-
-      <button id="copyRefBtn">
-        📋 COPY REFERRAL LINK
+      <button id="mineBtn">
+        START MINING
       </button>
 
     </div>
 
-    <div class="card info">
-      <h3>🚀 LBC Mining</h3>
-      <p>
-        Start your mining session and earn demo LBC rewards.
-        Mining automatically stops after 24 hours.
-      </p>
+
+    <!-- SESSION -->
+
+    <div class="card stats">
+
+      <div class="stat">
+
+        <span>Session Reward</span>
+
+        <strong id="session">
+          0.0000 LBC
+        </strong>
+
+      </div>
+
+
+      <div class="stat">
+
+        <span>Mining Duration</span>
+
+        <strong>
+          24 Hours
+        </strong>
+
+      </div>
+
     </div>
+
+
+    <!-- REFERRAL MENU -->
+
+    <div class="card menu-card">
+
+      <button
+        id="referralBtn"
+        class="menu-button"
+      >
+        👥 REFERRALS
+      </button>
+
+    </div>
+
+
+    <!-- INFO -->
+
+    <div class="card info">
+
+      <h3>🚀 LBC Mining</h3>
+
+      <p>
+        Start your mining session and earn
+        demo LBC rewards.
+      </p>
+
+      <p>
+        Mining automatically stops after
+        24 hours.
+      </p>
+
+    </div>
+
 
     <p class="footer">
       LBC Mining App
     </p>
 
   </div>
+
 
   <script src="app.js"></script>
 
